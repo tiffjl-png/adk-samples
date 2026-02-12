@@ -143,20 +143,21 @@ def main():
     # Update the .env file with the corpus name
     update_env_file(corpus.name, ENV_FILE_PATH)
 
-    # Create a temporary directory to store the downloaded PDF
-    with tempfile.TemporaryDirectory() as temp_dir:
-        pdf_path = os.path.join(temp_dir, PDF_FILENAME)
+    # Path to the local file we created
+    local_file_path = os.path.join(os.getcwd(), "alphabet_10k_summary.txt")
+    display_name = "alphabet_10k_summary.txt"
+    description = "Alphabet's 10-K 2024 summary document (local)"
 
-        # Download the PDF from the URL
-        download_pdf_from_url(PDF_URL, pdf_path)
-
-        # Upload the PDF to the corpus
+    # Upload the local file to the corpus
+    if os.path.exists(local_file_path):
         upload_pdf_to_corpus(
             corpus_name=corpus.name,
-            pdf_path=pdf_path,
-            display_name=PDF_FILENAME,
-            description="Alphabet's 10-K 2024 document",
+            pdf_path=local_file_path,
+            display_name=display_name,
+            description=description,
         )
+    else:
+        print(f"Error: Local file not found at {local_file_path}")
 
     # List all files in the corpus
     list_corpus_files(corpus_name=corpus.name)
